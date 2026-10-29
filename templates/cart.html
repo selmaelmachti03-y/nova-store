@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Your Bag — Nova Store{% endblock %}
+{% block content %}
+<section class="page-shell">
+  <div class="page-heading"><p class="eyebrow">YOUR NOVA EDIT</p><h1>Your bag<span>.</span></h1><p>Good choices. Let's take a look.</p></div>
+  {% if items %}
+  <div class="cart-layout">
+    <div class="cart-items">
+      {% for item in items %}
+      <article class="cart-item">
+        <a class="cart-thumb" href="{{ url_for('product_detail', product_id=item.product.id) }}">{% if item.product.image_url %}<img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">{% endif %}</a>
+        <div class="cart-item-info"><a class="product-name" href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a><p>{{ item.product.category }}</p><strong>{{ "%.2f"|format(item.product.price) }} MAD</strong>
+          <div class="cart-actions">
+            <form method="post" action="{{ url_for('update_cart', product_id=item.product.id) }}"><label class="quantity-label">Qty <input type="number" name="quantity" min="0" max="{{ item.product.stock }}" value="{{ item.quantity }}"></label><button class="text-button" type="submit">Update</button></form>
+            <form method="post" action="{{ url_for('remove_from_cart', product_id=item.product.id) }}"><button class="text-button" type="submit">Remove</button></form>
+          </div>
+        </div>
+        <strong class="line-total">{{ "%.2f"|format(item.line_total) }} MAD</strong>
+      </article>
+      {% endfor %}
+    </div>
+    <aside class="order-summary"><p class="eyebrow">THE TOTAL</p><div class="summary-line"><span>Subtotal</span><strong>{{ "%.2f"|format(total) }} MAD</strong></div><div class="summary-line"><span>Delivery</span><span>Calculated separately</span></div><div class="summary-total"><span>Total</span><strong>{{ "%.2f"|format(total) }} MAD</strong></div><a class="button button-dark full-button" href="{{ url_for('checkout') }}">Continue to checkout ↗</a><p class="summary-note">Demo checkout — no real payment is collected.</p></aside>
+  </div>
+  {% else %}
+  <div class="empty-state"><span>♡</span><h3>Your bag is taking a little break.</h3><p>Explore the collection and find something you love.</p><a class="button button-dark" href="{{ url_for('index') }}">Explore the collection ↗</a></div>
+  {% endif %}
+</section>
+{% endblock %}

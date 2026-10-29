@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Nova Store{% endblock %}
+{% block content %}
+<section class="page-shell checkout-shell">
+  <div class="page-heading"><p class="eyebrow">ALMOST YOURS</p><h1>Checkout<span>.</span></h1><p>Just a few details and your demo order is placed.</p></div>
+  <div class="checkout-layout">
+    <form class="checkout-form" method="post">
+      <h2>Delivery details</h2>
+      <label>Full name<input name="name" required autocomplete="name" placeholder="Your full name"></label>
+      <label>Email address<input name="email" type="email" required autocomplete="email" placeholder="you@example.com"></label>
+      <label>Delivery address<textarea name="address" required rows="3" autocomplete="street-address" placeholder="Street, city, postal code"></textarea></label>
+      <button class="button button-dark full-button" type="submit">Place demo order ↗</button>
+      <p class="summary-note">Portfolio demo only. No payment details are requested or processed.</p>
+    </form>
+    <aside class="order-summary"><p class="eyebrow">ORDER SUMMARY</p>
+      {% for item in items %}<div class="checkout-item"><span>{{ item.product.name }} × {{ item.quantity }}</span><strong>{{ "%.2f"|format(item.product.price * item.quantity) }} MAD</strong></div>{% endfor %}
+      <div class="summary-total"><span>Total</span><strong>{{ "%.2f"|format(total) }} MAD</strong></div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

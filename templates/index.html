@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Nova Store — Thoughtful everyday finds{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy">
+    <p class="eyebrow">THE EVERYDAY EDIT — VOL. 01</p>
+    <h1>Good things.<br><em>Good living.</em></h1>
+    <p class="hero-text">A considered collection of little things that make everyday feel a little more special.</p>
+    <a class="button button-dark" href="#shop">Explore the collection <span>↘</span></a>
+  </div>
+  <div class="hero-art">
+    <div class="hero-image"></div>
+    <div class="hero-note"><span>01 / 06</span><span>Made for your everyday</span></div>
+    <div class="hero-sticker">FIND<br>YOUR<br>FAVORITE ✳</div>
+  </div>
+</section>
+<section class="benefits">
+  <div><span class="benefit-icon">✳</span><span>Thoughtfully selected</span></div>
+  <div><span class="benefit-icon">◇</span><span>Everyday essentials</span></div>
+  <div><span class="benefit-icon">♡</span><span>Simple, considered design</span></div>
+</section>
+<section class="shop-section" id="shop">
+  <div class="section-heading">
+    <div><p class="eyebrow">THE COLLECTION</p><h2>Find your <em>something.</em></h2></div>
+    <span class="product-count">{{ products|length }} items</span>
+  </div>
+  <form class="filter-bar" method="get" action="{{ url_for('index') }}">
+    <label class="search-box"><span>⌕</span><input name="q" value="{{ search }}" placeholder="Search the collection..." aria-label="Search products"></label>
+    <select name="category" aria-label="Filter by category">
+      <option value="">All categories</option>
+      {% for item in categories %}<option value="{{ item.category }}" {% if selected_category == item.category %}selected{% endif %}>{{ item.category }}</option>{% endfor %}
+    </select>
+    <select name="sort" aria-label="Sort products">
+      <option value="featured" {% if selected_sort == 'featured' %}selected{% endif %}>Featured</option>
+      <option value="price-low" {% if selected_sort == 'price-low' %}selected{% endif %}>Price: low to high</option>
+      <option value="price-high" {% if selected_sort == 'price-high' %}selected{% endif %}>Price: high to low</option>
+    </select>
+    <button class="button button-outline filter-submit" type="submit">Apply</button>
+  </form>
+  {% if products %}
+  <div class="product-grid">
+    {% for product in products %}
+    <article class="product-card">
+      <a class="product-image-wrap" href="{{ url_for('product_detail', product_id=product.id) }}">
+        {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">{% else %}<div class="image-placeholder">nova.</div>{% endif %}
+        <span class="image-tag">{{ product.category }}</span>
+      </a>
+      <div class="product-info">
+        <div><a class="product-name" href="{{ url_for('product_detail', product_id=product.id) }}">{{ product.name }}</a><p class="product-subtitle">{{ product.description }}</p></div>
+        <strong>{{ "%.2f"|format(product.price) }} <small>MAD</small></strong>
+      </div>
+      <form method="post" action="{{ url_for('add_to_cart', product_id=product.id) }}" class="add-form">
+        <button class="add-button" type="submit" {% if product.stock < 1 %}disabled{% endif %}>{% if product.stock < 1 %}Out of stock{% else %}+ Add to bag{% endif %}</button>
+      </form>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="empty-state"><span>⌕</span><h3>No finds just yet</h3><p>Try another search or category.</p><a href="{{ url_for('index') }}" class="text-link">Clear filters ↗</a></div>
+  {% endif %}
+</section>
+<section class="quote-band"><p class="eyebrow">A NOTE FROM NOVA</p><h2>“It's the little things<br>that make a place <em>yours.</em>”</h2><span>— The Nova team</span></section>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Order placed — Nova Store{% endblock %}
+{% block content %}
+<section class="success-panel"><div class="success-icon">✓</div><p class="eyebrow">ORDER CONFIRMED</p><h1>That's a good choice<span>.</span></h1><p>Your demo order <strong>#{{ order_id }}</strong> has been saved to the local database.</p><p class="summary-note">This is a portfolio demonstration. No real payment or delivery is arranged.</p><a class="button button-dark" href="{{ url_for('index') }}">Back to the store ↗</a></section>
+{% endblock %}
